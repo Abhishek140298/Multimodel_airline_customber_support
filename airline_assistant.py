@@ -20,11 +20,27 @@ system_prompt=(
 )
 
 
+price_function={
+    "name":"get_ticket_price",
+    "description":"Get the price of the ticket to the destination city,call this whenever customer asks for the price",
+    "parameters":{
+        "type":"object",
+        "properties":{
+            "destination_city":{"type":"string",
+                                "description":"The city customber wants to travel"}
+        },
+        "reqired":["destination_city"]
+    }
+    
+}
+
+
+tools=[{"type":"function","function":price_function}]
 
 def chat(message,history):
     # 'history' is a list of past {"role": ..., "content": ...} messages Gradio manages for us
     messages=[{"role":"system","content":system_prompt}]+history+{{"role": "user", "content": message}}
-    response=cleint.chat.completion.create(model="gpt-4o-mini",message=messages)
+    response=cleint.chat.completion.create(model="gpt-4o-mini",message=messages,tools=tools)
     
     return response.choices[0].message.content
 
