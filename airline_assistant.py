@@ -39,8 +39,12 @@ tools=[{"type":"function","function":price_function}]
 
 def chat(message,history):
     # 'history' is a list of past {"role": ..., "content": ...} messages Gradio manages for us
-    messages=[{"role":"system","content":system_prompt}]+history+{{"role": "user", "content": message}}
+    messages=[{"role":"system","content":system_prompt}]+history+[{{"role": "user", "content": message}}]
     response=cleint.chat.completion.create(model="gpt-4o-mini",message=messages,tools=tools)
+    if response.choices[0].finish_reason=="tool_calls":
+        tool_call_message=response.choices[0].message
+        messages.append(tool_call_message)  # record that the model asked for a tool call
+
     
     return response.choices[0].message.content
 
