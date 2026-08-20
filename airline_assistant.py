@@ -55,5 +55,5 @@ def chat(message,history):
 
     
     return response.choices[0].message.content
-
+#!Image generation
 gr.ChatInterface(fn=chat,type="messages").launch()
