@@ -12,6 +12,14 @@ def get_ticket_price(destination_city):
     print(f"Tool called to get price of ticket for {destination_city}")
     city=destination_city.lower()
     return ticket_prices.get(city,"unknown")
+def image_generation(city):
+    image_res=client.image.generate(model="dall-e-3",
+                                    promt=f"Genrate a vibrant image of the destination{city} with the iconic landmarks",
+                                    size="1024x1024",
+                                    n=1,
+                                    response_format="b64__json")
+    return image_res.data[0].b64__json
+
 
 system_prompt=(
     "You are helpful customber support assitant for the airline called flight "
@@ -33,6 +41,7 @@ price_function={
     }
     
 }
+
 
 
 tools=[{"type":"function","function":price_function}]
