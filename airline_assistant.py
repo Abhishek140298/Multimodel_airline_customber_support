@@ -2,6 +2,9 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import gradio as gr
 import os
+import base64
+from io import BytesIO
+from PIL import Image
 
 load_dotenv()
 
@@ -20,6 +23,11 @@ def image_generation(city):
                                     response_format="b64__json")
     return image_res.data[0].b64__json
 
+def base_64_image(b64_image):
+    image_binary=base64.b64decode(b64_image)
+    return Image.open(BytesIO(image_binary))
+    
+    
 
 system_prompt=(
     "You are helpful customber support assitant for the airline called flight "
