@@ -58,6 +58,7 @@ def chat(message,history):
     # 'history' is a list of past {"role": ..., "content": ...} messages Gradio manages for us
     messages=[{"role":"system","content":system_prompt}]+history+[{{"role": "user", "content": message}}]
     response=cleint.chat.completion.create(model="gpt-4o-mini",messages=messages,tools=tools)
+    image=None
     if response.choices[0].finish_reason=="tool_calls":
         tool_call_message=response.choices[0].message
         messages.append(tool_call_message)  # record that the model asked for a tool call
@@ -68,9 +69,11 @@ def chat(message,history):
                price=get_ticket_price(city)
                messages.append({"role":"tool", "content": json.dumps({"destination_city": city, "price": price}),
                     "tool_call_id": tool_call.id})
+               image=base_64_image(image_generation(city))
+               
         response=cliet.chat.completion.create(model="gpt-4o-mini",messages=messages)       
-
+        reply=response.choices[0].message.content
     
-    return response.choices[0].message.content
+    return reply,image
 #!Image generation
 gr.ChatInterface(fn=chat,type="messages").launch()
