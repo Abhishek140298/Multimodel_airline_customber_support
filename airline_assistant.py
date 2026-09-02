@@ -76,4 +76,14 @@ def chat(message,history):
     
     return reply,image
 #!Image generation
-gr.ChatInterface(fn=chat,type="messages").launch()
+#gr.ChatInterface(fn=chat,type="messages").launch()
+
+#Layout with image also
+with gr.Blocks() as ui:
+    with gr.Row():
+        chatboat=gr.Chatbot(hieght=500,type="messages")
+        image_result=gr.Image(height=500)
+    with gr.Row():
+        textbox=gr.Textbox(lable="Please ask your query")
+    with gr.Row():
+        clear=gr.Button('clear')        
