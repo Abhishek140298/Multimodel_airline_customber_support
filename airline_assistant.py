@@ -86,4 +86,14 @@ with gr.Blocks() as ui:
     with gr.Row():
         textbox=gr.Textbox(lable="Please ask your query")
     with gr.Row():
-        clear=gr.Button('clear')        
+        clear=gr.Button('clear')
+    
+    def user_turn(message,history):
+        return "" ,history + [{"role":"user","content":message}] 
+    def bot_turns(history):
+        user_message=history[-1].content
+        reply,image=chat(user_message,history[:-1])
+        history.append({"role":"assitant","content":reply})
+        return history,image
+    textbox.submit(user_turn,[textbox,chatboat],[textbox,chatboat]).then(bot_turns,chatboat,[chatboat,image_result])       
+ui.launch()
