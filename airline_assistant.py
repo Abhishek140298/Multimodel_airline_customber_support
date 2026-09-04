@@ -95,5 +95,6 @@ with gr.Blocks() as ui:
         reply,image=chat(user_message,history[:-1])
         history.append({"role":"assitant","content":reply})
         return history,image
-    textbox.submit(user_turn,[textbox,chatboat],[textbox,chatboat]).then(bot_turns,chatboat,[chatboat,image_result])       
+    textbox.submit(user_turn,[textbox,chatboat],[textbox,chatboat]).then(bot_turns,chatboat,[chatboat,image_result])    
+    clear.click(lambda:(None,None),None,[chatboat,image_result])   
 ui.launch()
